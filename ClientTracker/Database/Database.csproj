@@ -42,6 +42,11 @@
   <ItemGroup>
     <Compile Include="DatabaseRepository.cs" />
     <Compile Include="IDatabaseRepository.cs" />
+    <Compile Include="Models\AccessPoint.cs" />
+    <Compile Include="Models\IpAddress.cs" />
+    <Compile Include="Models\MacAddress.cs" />
+    <Compile Include="Models\Ssid.cs" />
+    <Compile Include="Models\Vlan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
