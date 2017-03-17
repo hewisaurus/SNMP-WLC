@@ -251,3 +251,4 @@ paket-files/
 .idea/
 *.sln.iml
 /TestClient/TestClient/Connection.cs
+/ClientTracker/Common/Connection.cs
