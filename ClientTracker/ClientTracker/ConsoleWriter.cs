@@ -10,7 +10,7 @@ namespace ClientTracker
     {
         public void WriteLine(string line)
         {
-            Console.WriteLine(line);
+            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd hh:mm:ss} {line}");
         }
     }
 }

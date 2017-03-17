@@ -31,9 +31,8 @@ namespace ClientTracker
             var app = container.GetInstance<ClientTracker>();
             app.Run();
 
-            //BackgroundJob.Enqueue(() => app.UpdateDatabase());
-            //BackgroundJob.Schedule(() => app.UpdateDatabase(), TimeSpan.FromSeconds(30));
-            RecurringJob.AddOrUpdate("UpdateDatabase", () => app.UpdateDatabase(), "*/1 * * * *");
+            // This makes sure the database update is a recurring task
+            //RecurringJob.AddOrUpdate("UpdateDatabase", () => app.UpdateDatabase(), "*/1 * * * *");
 
             //app.UpdateDatabase();
 

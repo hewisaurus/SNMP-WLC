@@ -14,37 +14,43 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            Console.Write("Gathering bulk client information... ");
-
-            var macAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientMacAddress), Connection.Host, Connection.Community);
-            var ipAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientIpAddress), Connection.Host, Connection.Community);
-            var usernames = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientUsername), Connection.Host, Connection.Community);
-            var apMacAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientApMacAddress), Connection.Host, Connection.Community);
-            var ssids = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientSsid), Connection.Host, Connection.Community);
-            var wlanInterfaces = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientWlanInterface), Connection.Host, Connection.Community);
-            var vlans = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientVlan), Connection.Host, Connection.Community);
-
-            sw.Stop();
-            Console.WriteLine("done in {0}", sw.Elapsed);
-
-            var clients = new List<Client>();
-            clients.Update(macAddresses, Mibs.Mib.ClientMacAddress);
-            clients.Update(ipAddresses, Mibs.Mib.ClientIpAddress);
-            clients.Update(usernames, Mibs.Mib.ClientUsername);
-            clients.Update(apMacAddresses, Mibs.Mib.ClientApMacAddress);
-            clients.Update(ssids, Mibs.Mib.ClientSsid);
-            clients.Update(wlanInterfaces, Mibs.Mib.ClientWlanInterface);
-            clients.Update(vlans, Mibs.Mib.ClientVlan);
-
-            Console.WriteLine("We currently have {0} clients online", clients.Count);
-            
-            Console.WriteLine("SSID Client count:");
-            foreach (var ssidGroup in clients.GroupBy(c => c.Ssid))
+            var accessPoints = GatherBulk("1.3.6.1.4.1.14179.2.2.1", Connection.Host, Connection.Community);
+            foreach (var ap in accessPoints)
             {
-                Console.WriteLine("{0}: {1}", ssidGroup.Key, ssidGroup.Count());
+                Console.WriteLine("{0}: {1}", ap.Mib, ap.Value);
             }
+
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            //Console.Write("Gathering bulk client information... ");
+
+            //var macAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientMacAddress), Connection.Host, Connection.Community);
+            //var ipAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientIpAddress), Connection.Host, Connection.Community);
+            //var usernames = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientUsername), Connection.Host, Connection.Community);
+            //var apMacAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientApMacAddress), Connection.Host, Connection.Community);
+            //var ssids = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientSsid), Connection.Host, Connection.Community);
+            //var wlanInterfaces = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientWlanInterface), Connection.Host, Connection.Community);
+            //var vlans = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientVlan), Connection.Host, Connection.Community);
+
+            //sw.Stop();
+            //Console.WriteLine("done in {0}", sw.Elapsed);
+
+            //var clients = new List<Client>();
+            //clients.Update(macAddresses, Mibs.Mib.ClientMacAddress);
+            //clients.Update(ipAddresses, Mibs.Mib.ClientIpAddress);
+            //clients.Update(usernames, Mibs.Mib.ClientUsername);
+            //clients.Update(apMacAddresses, Mibs.Mib.ClientApMacAddress);
+            //clients.Update(ssids, Mibs.Mib.ClientSsid);
+            //clients.Update(wlanInterfaces, Mibs.Mib.ClientWlanInterface);
+            //clients.Update(vlans, Mibs.Mib.ClientVlan);
+
+            //Console.WriteLine("We currently have {0} clients online", clients.Count);
+            
+            //Console.WriteLine("SSID Client count:");
+            //foreach (var ssidGroup in clients.GroupBy(c => c.Ssid))
+            //{
+            //    Console.WriteLine("{0}: {1}", ssidGroup.Key, ssidGroup.Count());
+            //}
 
             Console.WriteLine("done.");
             Console.ReadLine();
