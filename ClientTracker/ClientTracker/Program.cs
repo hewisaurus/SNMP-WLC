@@ -28,8 +28,11 @@ namespace ClientTracker
 
             GlobalConfiguration.Configuration.UseStructureMapActivator(container);
             GlobalConfiguration.Configuration.UseColouredConsoleLogProvider().UseStorage(new MySqlStorage(Connection.DatabaseConnectionHangfire));
-
-            using (new BackgroundJobServer())
+            var options = new BackgroundJobServerOptions()
+            {
+                WorkerCount = 2
+            };
+            using (new BackgroundJobServer(options))
             {
                 Console.WriteLine("Hangfire Server started. Press ENTER to exit...");
                 Console.ReadLine();

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Database.Models
 {
-    public class IpAddress
+    public class Client
     {
         public int Id { get; set; }
-        public string Value { get; set; }
+        public string MacAddress { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastSeen { get; set; }
     }

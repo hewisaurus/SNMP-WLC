@@ -12,6 +12,7 @@ namespace Database.Sql
         public const string GetById = "SELECT * FROM AccessPoint AP JOIN AccessPointModel APM ON AP.ModelId = APM.Id WHERE AP.Id = @id";
         public const string GetByEthernetMac = "SELECT * FROM AccessPoint AP JOIN AccessPointModel APM ON AP.ModelId = APM.Id WHERE AP.EthernetMacAddress = @ethernetMacAddress";
         public const string GetIdByEthernetMac = "SELECT Id FROM AccessPoint WHERE EthernetMacAddress = @ethernetMacAddress";
+        public const string GetAllByEthernetMac = "SELECT * FROM AccessPoint WHERE EthernetMacAddress IN @ethernetMacAddresses";
 
         public const string Insert =
             "INSERT INTO AccessPoint(Name,ModelId,Location,EthernetMacAddress,BaseRadioMacAddress,IpAddress)" +

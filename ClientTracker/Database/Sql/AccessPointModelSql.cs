@@ -10,7 +10,8 @@ namespace Database.Sql
     {
         public const string GetAll = "SELECT * FROM AccessPointModel";
         public const string GetByName = "SELECT * FROM AccessPointModel WHERE Name = @name";
+        public const string GetAllByName = "SELECT * FROM AccessPointModel WHERE Name IN @names";
         public const string GetById = "SELECT * FROM AccessPointModel WHERE Id = @id";
-        public const string Insert = "INSERT INTO AccessPointModel(Name) VALUES(@name);";
+        public const string Insert = "INSERT INTO AccessPointModel(Name) VALUES(@name)";
     }
 }

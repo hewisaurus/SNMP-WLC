@@ -85,6 +85,36 @@ namespace ClientTracker
                 ? $"Something went wrong updating access point models.. {updateResult.Message}"
                 : "Updated AP Models");
 
+            // Update SSIDs
+            updateResult = await _database.UpdateSsids(clients.Select(c => c.Ssid).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating SSIDs.. {updateResult.Message}"
+                : "Updated SSIDs");
+
+            // Update VLANs
+            updateResult = await _database.UpdateVlans(clients.Where(c => !string.IsNullOrEmpty(c.Vlan)).Select(c => c.Vlan).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating VLANs.. {updateResult.Message}"
+                : "Updated VLANs");
+
+            // Update interfaces
+            updateResult = await _database.UpdateWlanInterfaces(clients.Where(c => !string.IsNullOrEmpty(c.Interface)).Select(c => c.Interface).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating WLC interfaces.. {updateResult.Message}"
+                : "Updated WLC interfaces");
+
+            // Update clients
+            updateResult = await _database.UpdateClients(clients.Select(c => c.MacAddress.Replace(" ","")).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating clients.. {updateResult.Message}"
+                : "Updated clients");
+
+            // Update IP Addresses
+            updateResult = await _database.UpdateIpAddresses(clients.Where(c => !string.IsNullOrEmpty(c.IpAddress)).Select(c => c.IpAddress).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating IP addresses.. {updateResult.Message}"
+                : "Updated IP addresses");
+
             var dbApModels = await _database.GetApModelsAsync();
             // Build the list of access points that the database should contain
             var actualAps = accessPoints.Select(accessPoint => new AccessPoint
@@ -101,13 +131,44 @@ namespace ClientTracker
                 ? $"Something went wrong updating access points.. {updateResult.Message}"
                 : "Updated APs");
 
-            //_writer.WriteLine($"We currently have {clients.Count} clients online");
+            // Return the records so that we can key them properly (i.e. can't insert without FKs)
+            var apListTask = _database.GetAccessPointsAsync();
+            var clientListTask = _database.GetClientsAsync();
+            var ssidListTask = _database.GetSsidsAsync();
+            var vlanListTask = _database.GetVlansAsync();
+            var wlanInterfaceListTask = _database.GetWlanInterfacesAsync();
+            var ipAddressListTask = _database.GetIpAddressesAsync();
 
-            //_writer.WriteLine("SSID Client count:");
-            //foreach (var ssidGroup in clients.GroupBy(c => c.Ssid))
-            //{
-            //    _writer.WriteLine($"{ssidGroup.Key}: {ssidGroup.Count()}");
-            //}
+            await Task.WhenAll(apListTask, clientListTask, ssidListTask, vlanListTask, wlanInterfaceListTask, ipAddressListTask);
+            var apList = apListTask.Result;
+            var clientList = clientListTask.Result;
+            var ssidList = ssidListTask.Result;
+            var vlanList = vlanListTask.Result;
+            var wlanInterfaceList = wlanInterfaceListTask.Result;
+            var ipAddressList = ipAddressListTask.Result;
+
+            // Add client tracking records
+            var clientTrackingList = new List<ClientTracking>();
+            foreach (var client in clients)
+            {
+                clientTrackingList.Add(new ClientTracking
+                {
+                    ClientId = clientList.First(c => c.MacAddress == client.MacAddress.Replace(" ","").ToUpper()).Id,
+                    AccessPointId = apList.First(ap => ap.BaseRadioMacAddress == client.ApMacAddress.Replace(" ","").ToUpper()).Id,
+                    IpAddressId = ipAddressList.First(ip => ip.Value == client.IpAddress).Id,
+                    SsidId = ssidList.First(s => s.Value == client.Ssid).Id,
+                    Username = client.Username,
+                    VlanId = vlanList.First(v => v.Value == client.Vlan).Id,
+                    WlanInterfaceId = wlanInterfaceList.First(w => w.Value == client.Interface).Id
+                });
+            }
+            
+            _writer.WriteLine("Beginning main update block");
+
+            await _database.AddClientTracking(clientTrackingList);
+            _writer.WriteLine(!updateResult.Success
+               ? $"Something went wrong adding client tracking.. {updateResult.Message}"
+               : "Main update block completed successfully");
 
             _writer.WriteLine("Database update complete");
         }

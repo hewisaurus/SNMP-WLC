@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Database.Models
 {
-    public class IpAddress
+    public class WlanInterface
     {
         public int Id { get; set; }
         public string Value { get; set; }
