@@ -41,9 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkResult.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="ReturnValue.cs" />
+    <Compile Include="SnmpAccessPoint.cs" />
+    <Compile Include="SnmpClient.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Mibs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

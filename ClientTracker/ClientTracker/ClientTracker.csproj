@@ -81,6 +81,7 @@
     <Compile Include="ClientTracker.cs" />
     <Compile Include="ConsoleWriter.cs" />
     <Compile Include="DI\AppRegistry.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="IConsoleWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

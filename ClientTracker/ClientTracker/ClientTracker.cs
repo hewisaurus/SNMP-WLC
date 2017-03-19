@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Database;
+using Database.Models;
 using SnmpSharpNet;
+using IpAddress = SnmpSharpNet.IpAddress;
 
 namespace ClientTracker
 {
@@ -26,7 +28,10 @@ namespace ClientTracker
             _writer.WriteLine("Application running!");
         }
 
-        public void UpdateDatabase()
+        /// <summary>
+        /// This method polls both the APs and the Clients, and updates the database
+        /// </summary>
+        public async Task UpdateDatabase()
         {
             _writer.WriteLine("Gathering details from SNMP...");
 
@@ -38,9 +43,17 @@ namespace ClientTracker
             var wlanInterfaces = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientWlanInterface), Connection.Host, Connection.Community);
             var vlans = GatherBulk(Mibs.GetValue(Mibs.Mib.ClientVlan), Connection.Host, Connection.Community);
 
+            var apBaseRadioMac = GatherBulk(Mibs.GetValue(Mibs.Mib.ApBaseRadioMacAddress), Connection.Host, Connection.Community);
+            var apEthernetMac = GatherBulk(Mibs.GetValue(Mibs.Mib.ApEthernetMacAddress), Connection.Host, Connection.Community);
+            var apIpAddresses = GatherBulk(Mibs.GetValue(Mibs.Mib.ApIpAddress), Connection.Host, Connection.Community);
+            var apNames = GatherBulk(Mibs.GetValue(Mibs.Mib.ApName), Connection.Host, Connection.Community);
+            var apLocations = GatherBulk(Mibs.GetValue(Mibs.Mib.ApLocation), Connection.Host, Connection.Community);
+            var apModels = GatherBulk(Mibs.GetValue(Mibs.Mib.ApModel), Connection.Host, Connection.Community);
+            var apSerialNumbers = GatherBulk(Mibs.GetValue(Mibs.Mib.ApSerialNumber), Connection.Host, Connection.Community);
+
             _writer.WriteLine("Finished retrieving SNMP data");
 
-            var clients = new List<Client>();
+            var clients = new List<SnmpClient>();
             clients.Update(macAddresses, Mibs.Mib.ClientMacAddress);
             clients.Update(ipAddresses, Mibs.Mib.ClientIpAddress);
             clients.Update(usernames, Mibs.Mib.ClientUsername);
@@ -49,15 +62,52 @@ namespace ClientTracker
             clients.Update(wlanInterfaces, Mibs.Mib.ClientWlanInterface);
             clients.Update(vlans, Mibs.Mib.ClientVlan);
 
+            var accessPoints = new List<SnmpAccessPoint>();
+            accessPoints.Update(apBaseRadioMac, Mibs.Mib.ApBaseRadioMacAddress);
+            accessPoints.Update(apEthernetMac, Mibs.Mib.ApEthernetMacAddress);
+            accessPoints.Update(apIpAddresses, Mibs.Mib.ApIpAddress);
+            accessPoints.Update(apNames, Mibs.Mib.ApName);
+            accessPoints.Update(apLocations, Mibs.Mib.ApLocation);
+            accessPoints.Update(apModels, Mibs.Mib.ApModel);
+            accessPoints.Update(apSerialNumbers, Mibs.Mib.ApSerialNumber);
+
             _writer.WriteLine("Database update started");
 
-            _writer.WriteLine($"We currently have {clients.Count} clients online");
+            _writer.WriteLine($"Access point count: {accessPoints.Count}");
+            //foreach (var accessPoint in accessPoints)
+            //{
+            //    _writer.WriteLine($"AP {accessPoint.Name} ({accessPoint.Location}) model {accessPoint.Model}");
+            //}
 
-            _writer.WriteLine("SSID Client count:");
-            foreach (var ssidGroup in clients.GroupBy(c => c.Ssid))
+            // Update AP Models
+            var updateResult = await _database.UpdateAccessPointModels(accessPoints.Select(ap => ap.Model).Distinct().ToList());
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating access point models.. {updateResult.Message}"
+                : "Updated AP Models");
+
+            var dbApModels = await _database.GetApModelsAsync();
+            // Build the list of access points that the database should contain
+            var actualAps = accessPoints.Select(accessPoint => new AccessPoint
             {
-                _writer.WriteLine($"{ssidGroup.Key}: {ssidGroup.Count()}");
-            }
+                BaseRadioMacAddress = accessPoint.BaseRadioMacAddress,
+                EthernetMacAddress = accessPoint.EthernetMacAddress,
+                Location = accessPoint.Location,
+                Name = accessPoint.Name,
+                ModelId = dbApModels.First(m => m.Name == accessPoint.Model).Id,
+                IpAddress = accessPoint.IpAddress
+            }).ToList();
+            updateResult = await _database.UpdateAccessPoints(actualAps);
+            _writer.WriteLine(!updateResult.Success
+                ? $"Something went wrong updating access points.. {updateResult.Message}"
+                : "Updated APs");
+
+            //_writer.WriteLine($"We currently have {clients.Count} clients online");
+
+            //_writer.WriteLine("SSID Client count:");
+            //foreach (var ssidGroup in clients.GroupBy(c => c.Ssid))
+            //{
+            //    _writer.WriteLine($"{ssidGroup.Key}: {ssidGroup.Count()}");
+            //}
 
             _writer.WriteLine("Database update complete");
         }

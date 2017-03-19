@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public class Client
+    public class SnmpClient
     {
         public string Index { get; set; }
         public string MacAddress { get; set; }
@@ -17,23 +17,23 @@ namespace Common
         public string Interface { get; set; }
         public string Vlan { get; set; }
 
-        public Client()
+        public SnmpClient()
         {
 
         }
 
-        public Client(string index)
+        public SnmpClient(string index)
         {
             Index = index;
         }
 
-        public Client(string index, string mac, string ip, string user, string apMac, string ssid, string iface, string vlan)
+        public SnmpClient(string index, string mac, string ip, string user, string apMac, string ssid, string iface, string vlan)
         {
             Index = index;
-            MacAddress = mac;
+            MacAddress = mac.Replace(" ","");
             IpAddress = ip;
             Username = user;
-            ApMacAddress = apMac;
+            ApMacAddress = apMac.Replace(" ", "");
             Ssid = ssid;
             Interface = iface;
             Vlan = vlan;
