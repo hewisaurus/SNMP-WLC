@@ -1,8 +1,36 @@
-﻿@model DotNet.Highcharts.Highcharts
+﻿@model WebMvc5.Models.Home.IndexViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
 <div class="row">
-   @Model
+    @Model.OverallClientCountLastHour
 </div>
+
+<div class="row">
+    @Model.OverallClientCountLast2Hours
+</div>
+
+<div class="row">
+    @Model.OverallClientCountLast4Hours
+</div>
+
+<div class="row">
+    @Model.OverallClientCountLast8Hours
+</div>
+
+<div class="row">
+    @Model.OverallClientCountLast16Hours
+</div>
+
+<div class="row">
+    @Model.OverallClientCountLast24Hours
+</div>
+
+<div class="row">
+    @Model.OverallClientCountLast48Hours
+</div>
+
+@*<div class="row">
+    @Model.AccessPointClientCount
+</div>*@

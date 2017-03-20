@@ -11,5 +11,18 @@ namespace Database.Sql
         public const string Insert =
             "INSERT INTO ClientTracking(ClientId,IpAddressId,Username,AccessPointId,SsidId,WlanInterfaceId,VlanId,BatchDate)" +
             "VALUES(@clientId,@ipAddressId,@username,@accessPointId,@ssidId,@wlanInterfaceId,@vlanId,@batchDate)";
+
+        public const string GetOverallClientCountGreater =
+            "SELECT BatchDate,Count(ClientId) AS Clients FROM ClientTracking " +
+            "WHERE BatchDate > @batchDate " +
+            "GROUP BY BatchDate " +
+            "ORDER BY BatchDate ASC";
+
+        public const string GetAccessPointClientCountGreater =
+            "SELECT BatchDate, AP.Name AS AccessPoint, Count(ClientId) AS Clients " +
+            "FROM ClientTracking CT JOIN AccessPoint AP ON CT.AccessPointId = AP.Id " +
+            "WHERE BatchDate > @batchDate " +
+            "GROUP BY BatchDate, AccessPointId " +
+            "ORDER BY BatchDate ASC";
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Database.Models;
+using Database.Models.Custom;
 
 namespace Database
 {
@@ -28,5 +29,11 @@ namespace Database
         Task<ReturnValue> UpdateClients(List<string> clients);
         Task<ReturnValue> UpdateIpAddresses(List<string> addresses);
         Task<ReturnValue> AddClientTracking(List<ClientTracking> records);
+
+        Task<List<ClientCountOverall>> GetOverallClientCountLastHour();
+        Task<List<ClientCountOverall>> GetOverallClientCountToday();
+        Task<List<ClientCountAccessPoint>> GetAccessPointClientCountLastHour();
+        Task<List<ClientCountAccessPoint>> GetAccessPointClientCountToday();
+        Task<List<ClientCountOverall>> GetOverallClientCountLastXHours(int hours);
     }
 }

@@ -54,6 +54,8 @@
     <Compile Include="Models\AccessPointModel.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\ClientTracking.cs" />
+    <Compile Include="Models\Custom\ClientCountAccessPoint.cs" />
+    <Compile Include="Models\Custom\ClientCountOverall.cs" />
     <Compile Include="Models\IpAddress.cs" />
     <Compile Include="Models\MacAddress.cs" />
     <Compile Include="Models\Ssid.cs" />
@@ -79,6 +81,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sql\Custom\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,6 +8,7 @@ using Common;
 using Dapper;
 using Database.Connection;
 using Database.Models;
+using Database.Models.Custom;
 using Database.Sql;
 
 namespace Database
@@ -422,6 +423,56 @@ namespace Database
             {
                 return new ReturnValue(false, ex.Message);
             }
+        }
+
+        public async Task<List<ClientCountOverall>> GetOverallClientCountLastHour()
+        {
+            var smallestBatchDate = DateTime.Now.Subtract(new TimeSpan(1, 0, 0));
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new {batchDate = smallestBatchDate})))
+                .ToList();
+        }
+
+        public async Task<List<ClientCountOverall>> GetOverallClientCountToday()
+        {
+            var smallestBatchDate = DateTime.Today;
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new { batchDate = smallestBatchDate })))
+                .ToList();
+        }
+
+        public async Task<List<ClientCountAccessPoint>> GetAccessPointClientCountLastHour()
+        {
+            var smallestBatchDate = DateTime.Now.Subtract(new TimeSpan(1, 0, 0));
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountAccessPoint>(ClientTrackingSql.GetAccessPointClientCountGreater, new { batchDate = smallestBatchDate })))
+                .ToList();
+        }
+
+        public async Task<List<ClientCountAccessPoint>> GetAccessPointClientCountToday()
+        {
+            var smallestBatchDate = DateTime.Today;
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountAccessPoint>(ClientTrackingSql.GetAccessPointClientCountGreater, new { batchDate = smallestBatchDate })))
+                .ToList();
+        }
+
+        public async Task<List<ClientCountOverall>> GetOverallClientCountLastXHours(int hours)
+        {
+            var smallestBatchDate = DateTime.Now.Subtract(new TimeSpan(hours, 0, 0));
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new { batchDate = smallestBatchDate })))
+                .ToList();
         }
     }
 }
