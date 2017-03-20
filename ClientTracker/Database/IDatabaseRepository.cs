@@ -11,7 +11,6 @@ namespace Database
     public interface IDatabaseRepository
     {
         void LogLine(string line);
-
         
         Task<List<AccessPointModel>> GetApModelsAsync();
         Task<List<AccessPoint>> GetAccessPointsAsync();

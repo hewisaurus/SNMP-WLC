@@ -1,31 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 using DotNet.Highcharts;
 using DotNet.Highcharts.Enums;
 using DotNet.Highcharts.Helpers;
 using DotNet.Highcharts.Options;
-using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace WebMvc5.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
-            //    var chart = new Highcharts()
-            //    {
-            //        ID = "test",
-            //        SplineSeries = new SplineSeries()
-            //        {
-            //            Name = "testSpline",Data = new List<SplineSeriesData>()
-            //            {
-            //                new SplineSeriesData(){Name = "a",X = 10,Y=20}
-            //            }
-            //        }
-            //    };
-
             var rec = new List<Tuple<DateTime, int>>
             {
                 new Tuple<DateTime, int>(new DateTime(2017, 1, 1), 35),
@@ -45,27 +34,30 @@ namespace Web.Controllers
                     ZoomType = ZoomTypes.Xy,
                     Height = 400
                 })
+                .SetXAxis(new XAxis
+                {
+                    Type = AxisTypes.Datetime,
+                    DateTimeLabelFormats = new DateTimeLabel { Month = "%e %b", Year = "%e %b", Day = "%e %b", Week = "%e %b" },
+                    LineColor = Color.White,
+                    TickColor = Color.White,
+
+                })
                 .SetSeries(seriesList.ToArray());
 
             return View(chart);
         }
 
-        public IActionResult About()
+        public ActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public ActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
-
-        public IActionResult Error()
-        {
             return View();
         }
     }
