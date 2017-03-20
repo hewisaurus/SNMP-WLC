@@ -9,7 +9,7 @@ namespace Database.Sql
     public class ClientTrackingSql
     {
         public const string Insert =
-            "INSERT INTO ClientTracking(ClientId,IpAddressId,Username,AccessPointId,SsidId,WlanInterfaceId,VlanId)" +
-            "VALUES(@clientId,@ipAddressId,@username,@accessPointId,@ssidId,@wlanInterfaceId,@vlanId)";
+            "INSERT INTO ClientTracking(ClientId,IpAddressId,Username,AccessPointId,SsidId,WlanInterfaceId,VlanId,BatchDate)" +
+            "VALUES(@clientId,@ipAddressId,@username,@accessPointId,@ssidId,@wlanInterfaceId,@vlanId,@batchDate)";
     }
 }

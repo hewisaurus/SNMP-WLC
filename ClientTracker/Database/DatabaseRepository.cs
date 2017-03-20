@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     // Search for all models at the same time and compare lists later, rather than one query at a time
@@ -51,7 +55,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -64,6 +70,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     // Get the list of IDs that exist within the DB
@@ -106,7 +115,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -118,6 +129,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     var existingSsids =
@@ -142,7 +156,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -154,6 +170,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     var existingVlans =
@@ -178,7 +197,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -190,6 +211,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     var existingInterfaces =
@@ -214,7 +238,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -224,6 +250,9 @@ namespace Database
 
         public async Task<ReturnValue> UpdateClients(List<string> clients)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             var dbClients = new List<Client>();
             List<string> searchClients = new List<string>(clients);
             int maxPerIteration = 950;
@@ -260,7 +289,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -270,6 +301,9 @@ namespace Database
 
         public async Task<ReturnValue> UpdateIpAddresses(List<string> addresses)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             var dbAddresses = new List<IpAddress>();
             List<string> searchAddresses = new List<string>(addresses);
             int maxPerIteration = 950;
@@ -305,7 +339,9 @@ namespace Database
                     }
                 }
 
-                return new ReturnValue(true, null);
+                sw.Stop();
+
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -357,6 +393,9 @@ namespace Database
         {
             try
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+
                 using (var conn = await OpenConnectionAsync())
                 {
                     foreach (var record in records)
@@ -369,12 +408,15 @@ namespace Database
                             record.AccessPointId,
                             record.SsidId,
                             record.WlanInterfaceId,
-                            record.VlanId
+                            record.VlanId,
+                            record.BatchDate
                         });
                     }
                 }
+                
+                sw.Stop();
 
-                return new ReturnValue(true, null);
+                return new ReturnValue(true, null, null, sw.Elapsed);
             }
             catch (Exception ex)
             {

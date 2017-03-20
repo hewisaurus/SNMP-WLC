@@ -16,6 +16,7 @@ namespace Database.Models
         public int SsidId { get; set; }
         public int VlanId { get; set; }
         public int WlanInterfaceId { get; set; }
+        public DateTime BatchDate { get; set; }
         public DateTime Created { get; set; }
     }
 }

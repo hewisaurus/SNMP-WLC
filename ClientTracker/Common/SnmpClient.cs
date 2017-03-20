@@ -42,13 +42,13 @@ namespace Common
         public override string ToString()
         {
             return string.Format(
-                "Mac address: {1}{0}" +
-                "IP Address: {2}{0}" +
-                "Username: {3}{0}" +
-                "AP Mac Address: {4}{0}" +
-                "SSID: {5}{0}" +
-                "Interface: {6}{0}" +
-                "VLAN: {7}{0}",
+                "Mac address: |{1}|{0}" +
+                "IP Address: |{2}|{0}" +
+                "Username: |{3}|{0}" +
+                "AP Mac Address: |{4}|{0}" +
+                "SSID: |{5}|{0}" +
+                "Interface: |{6}|{0}" +
+                "VLAN: |{7}|{0}",
                 Environment.NewLine, MacAddress, IpAddress, Username, ApMacAddress, Ssid, Interface, Vlan);
         }
     }

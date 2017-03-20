@@ -134,5 +134,40 @@ namespace ClientTracker
                 }
             }
         }
+
+        public static void Cleanup(this List<SnmpClient> clients)
+        {
+            for (int i = clients.Count - 1; i >= 0; i--)
+            {
+                var thisClient = clients[i];
+                if (string.IsNullOrEmpty(thisClient.IpAddress) || string.IsNullOrEmpty(thisClient.ApMacAddress) ||
+                    string.IsNullOrEmpty(thisClient.Interface) || string.IsNullOrEmpty(thisClient.MacAddress) ||
+                    string.IsNullOrEmpty(thisClient.Ssid) || string.IsNullOrEmpty(thisClient.Username) ||
+                    string.IsNullOrEmpty(thisClient.Vlan) || thisClient.IpAddress == "0.0.0.0")
+                {
+                    clients.RemoveAt(i);
+                    continue;
+                }
+
+                thisClient.ApMacAddress = thisClient.ApMacAddress.Replace(" ", "").ToUpper();
+                thisClient.MacAddress = thisClient.MacAddress.Replace(" ", "").ToUpper();
+            }
+            //var clientsToRemove = new List<SnmpClient>();
+            //foreach (var client in clients)
+            //{
+            //    if (string.IsNullOrEmpty(client.IpAddress) || string.IsNullOrEmpty(client.ApMacAddress) ||
+            //        string.IsNullOrEmpty(client.Interface) || string.IsNullOrEmpty(client.MacAddress) ||
+            //        string.IsNullOrEmpty(client.Ssid) || string.IsNullOrEmpty(client.Username) ||
+            //        string.IsNullOrEmpty(client.Vlan))
+            //    {
+            //        clientsToRemove.Add(client);
+            //        continue;
+            //    }
+
+            //    client.ApMacAddress = client.ApMacAddress.Replace(" ", "").ToUpper();
+            //    client.MacAddress = client.MacAddress.Replace(" ", "").ToUpper();
+            //}
+            //clients = clients.Except(clientsToRemove).ToList();
+        }
     }
 }
