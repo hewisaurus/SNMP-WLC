@@ -27,7 +27,8 @@ namespace WebMvc5.Helpers.Charts
             var chart = new Highcharts($"overallClientCount{lastXHours}hours")
                 .InitChart(new Chart
                 {
-                    DefaultSeriesType = ChartDefaults.OverallClientCountChartType,
+                    //DefaultSeriesType = ChartDefaults.OverallClientCountChartType,
+                    DefaultSeriesType = ChartTypes.Areaspline,
                     ZoomType = ChartDefaults.OverallClientCountZoomType,
                     Height = ChartDefaults.OverallClientCountChartHeight,
                 })
@@ -56,9 +57,11 @@ namespace WebMvc5.Helpers.Charts
                 .SetCredits(new Credits{Enabled = false})
                 .SetPlotOptions(new PlotOptions
                 {
-                    Spline = new PlotOptionsSpline()
+                    Areaspline = new PlotOptionsAreaspline()
+                    //Spline = new PlotOptionsSpline()
                     {
-                        Marker = new PlotOptionsSplineMarker()
+                        //Marker = new PlotOptionsSplineMarker()
+                        Marker = new PlotOptionsAreasplineMarker()
                         {
                             Enabled = false
                         },
