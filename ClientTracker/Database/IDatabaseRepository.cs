@@ -35,5 +35,6 @@ namespace Database
         Task<List<ClientCountAccessPoint>> GetAccessPointClientCountLastHour();
         Task<List<ClientCountAccessPoint>> GetAccessPointClientCountToday();
         Task<List<ClientCountOverall>> GetOverallClientCountLastXHours(int hours);
+        Task<List<ClientCountVlan>> GetPerVlanClientCountLastXHours(int hours);
     }
 }

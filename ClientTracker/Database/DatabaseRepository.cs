@@ -474,5 +474,15 @@ namespace Database
                         q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new { batchDate = smallestBatchDate })))
                 .ToList();
         }
+
+        public async Task<List<ClientCountVlan>> GetPerVlanClientCountLastXHours(int hours)
+        {
+            var smallestBatchDate = DateTime.Now.Subtract(new TimeSpan(hours, 0, 0));
+            return
+                (await QueryAsync(
+                    q =>
+                        q.QueryAsync<ClientCountVlan>(ClientTrackingSql.GetVlanClientCountGreater, new { batchDate = smallestBatchDate })))
+                .ToList();
+        }
     }
 }

@@ -4,6 +4,8 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Glimpse.Ado.AlternateType;
+using MySql.Data.MySqlClient;
 
 namespace Database.Connection
 {
@@ -18,11 +20,16 @@ namespace Database.Connection
 
         public DbConnection Create()
         {
-            var factory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
-            var conn = factory.CreateConnection();
-            conn.ConnectionString = _connectionString;
+            return new GlimpseDbConnection(new MySqlConnection(_connectionString));
+            //var conn = MySqlClientFactory.Instance.CreateConnection();
+            //conn.ConnectionString = _connectionString;
+            //var factory = DbProviderFactories.GetFactory("MySql.Data.MySqlClient");
+            //var factory = DbProviderFactories.GetFactory("MySqlClientFactory");
+            //var factory = MySqlClientFactory.
+            //var conn = factory.CreateConnection();
+            //conn.ConnectionString = _connectionString;
 
-            return conn;
+            //return conn;
         }
 
         public string GetConnectionString()

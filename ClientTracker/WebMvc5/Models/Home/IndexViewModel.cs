@@ -18,5 +18,13 @@ namespace WebMvc5.Models.Home
         public Highcharts OverallClientCountLast16Hours { get; set; }
         public Highcharts OverallClientCountLast24Hours { get; set; }
         public Highcharts OverallClientCountLast48Hours { get; set; }
+
+        public Highcharts PerVlanClientCountLastHour { get; set; }
+        public Highcharts PerVlanClientCountLast2Hours { get; set; }
+        public Highcharts PerVlanClientCountLast4Hours { get; set; }
+        public Highcharts PerVlanClientCountLast8Hours { get; set; }
+        public Highcharts PerVlanClientCountLast16Hours { get; set; }
+        public Highcharts PerVlanClientCountLast24Hours { get; set; }
+        public Highcharts PerVlanClientCountLast48Hours { get; set; }
     }
 }

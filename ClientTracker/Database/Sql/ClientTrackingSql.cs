@@ -24,5 +24,12 @@ namespace Database.Sql
             "WHERE BatchDate > @batchDate " +
             "GROUP BY BatchDate, AccessPointId " +
             "ORDER BY BatchDate ASC";
+
+        public const string GetVlanClientCountGreater =
+            "SELECT BatchDate, V.Value AS Vlan, Count(ClientId) AS Clients " +
+            "FROM ClientTracking CT JOIN Vlan V ON CT.VlanId = V.Id " +
+            "WHERE BatchDate > @batchDate " +
+            "GROUP BY BatchDate, VlanId " +
+            "ORDER BY BatchDate ASC";
     }
 }

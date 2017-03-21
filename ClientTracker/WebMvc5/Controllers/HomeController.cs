@@ -28,15 +28,63 @@ namespace WebMvc5.Controllers
 
         public async Task<ActionResult> Index()
         {
+            var overall1hTask = _chart.GetOverallClientCount(1);
+            var overall2hTask = _chart.GetOverallClientCount(2);
+            var overall4hTask = _chart.GetOverallClientCount(4);
+            var overall8hTask = _chart.GetOverallClientCount(8);
+            var overall16hTask = _chart.GetOverallClientCount(16);
+            var overall24hTask = _chart.GetOverallClientCount(24);
+            var overall48hTask = _chart.GetOverallClientCount(48);
+
+            var perVlan1hTask = _chart.GetPerVlanClientCount(1);
+            var perVlan2hTask = _chart.GetPerVlanClientCount(2);
+            var perVlan4hTask = _chart.GetPerVlanClientCount(4);
+            var perVlan8hTask = _chart.GetPerVlanClientCount(8);
+            var perVlan16hTask = _chart.GetPerVlanClientCount(16);
+            var perVlan24hTask = _chart.GetPerVlanClientCount(24);
+            var perVlan48hTask = _chart.GetPerVlanClientCount(48);
+
+
+            await Task.WhenAll(overall1hTask, overall2hTask, overall4hTask, overall8hTask, overall16hTask, overall24hTask, overall48hTask,
+                perVlan1hTask, perVlan2hTask, perVlan4hTask, perVlan8hTask, perVlan16hTask, perVlan24hTask, perVlan48hTask);
+
+
+
             var model = new IndexViewModel
             {
-                OverallClientCountLastHour = await _chart.GetOverallClientCount(1),
-                OverallClientCountLast2Hours = await _chart.GetOverallClientCount(2),
-                OverallClientCountLast4Hours = await _chart.GetOverallClientCount(4),
-                OverallClientCountLast8Hours = await _chart.GetOverallClientCount(8),
-                OverallClientCountLast16Hours = await _chart.GetOverallClientCount(16),
-                OverallClientCountLast24Hours = await _chart.GetOverallClientCount(24),
-                OverallClientCountLast48Hours = await _chart.GetOverallClientCount(48)
+
+                //3922-4350ms
+                //OverallClientCountLastHour = await _chart.GetOverallClientCount(1),
+                //OverallClientCountLast2Hours = await _chart.GetOverallClientCount(2),
+                //OverallClientCountLast4Hours = await _chart.GetOverallClientCount(4),
+                //OverallClientCountLast8Hours = await _chart.GetOverallClientCount(8),
+                //OverallClientCountLast16Hours = await _chart.GetOverallClientCount(16),
+                //OverallClientCountLast24Hours = await _chart.GetOverallClientCount(24),
+                //OverallClientCountLast48Hours = await _chart.GetOverallClientCount(48),
+
+                OverallClientCountLastHour = overall1hTask.Result,
+                OverallClientCountLast2Hours = overall2hTask.Result,
+                OverallClientCountLast4Hours = overall4hTask.Result,
+                OverallClientCountLast8Hours = overall8hTask.Result,
+                OverallClientCountLast16Hours = overall16hTask.Result,
+                OverallClientCountLast24Hours = overall24hTask.Result,
+                OverallClientCountLast48Hours = overall48hTask.Result,
+
+                PerVlanClientCountLastHour = perVlan1hTask.Result,
+                PerVlanClientCountLast2Hours = perVlan2hTask.Result,
+                PerVlanClientCountLast4Hours = perVlan4hTask.Result,
+                PerVlanClientCountLast8Hours = perVlan8hTask.Result,
+                PerVlanClientCountLast16Hours = perVlan16hTask.Result,
+                PerVlanClientCountLast24Hours = perVlan24hTask.Result,
+                PerVlanClientCountLast48Hours = perVlan48hTask.Result,
+
+                //PerVlanClientCountLastHour = await _chart.GetPerVlanClientCount(1),
+                //PerVlanClientCountLast2Hours = await _chart.GetPerVlanClientCount(2),
+                //PerVlanClientCountLast4Hours = await _chart.GetPerVlanClientCount(4),
+                //PerVlanClientCountLast8Hours = await _chart.GetPerVlanClientCount(8),
+                //PerVlanClientCountLast16Hours = await _chart.GetPerVlanClientCount(16),
+                //PerVlanClientCountLast24Hours = await _chart.GetPerVlanClientCount(24),
+                //PerVlanClientCountLast48Hours = await _chart.GetPerVlanClientCount(48),
             };
 
             return View(model);
