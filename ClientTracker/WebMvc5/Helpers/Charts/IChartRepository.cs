@@ -9,5 +9,6 @@ namespace WebMvc5.Helpers.Charts
         Task<Highcharts> GetOverallClientCount(ChartPeriod chartPeriod);
 
         Task<Highcharts> GetPerVlanClientCount(int lastXHours);
+        Task<Highcharts> GetPerAccessPointClientCount(int lastXHours, int showTopX = 5);
     }
 }

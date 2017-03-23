@@ -21,7 +21,8 @@ namespace Database.Sql
         public const string GetAccessPointClientCountGreater =
             "SELECT BatchDate, AP.Name AS AccessPoint, Count(ClientId) AS Clients " +
             "FROM ClientTracking CT JOIN AccessPoint AP ON CT.AccessPointId = AP.Id " +
-            "WHERE BatchDate > @batchDate " +
+            "JOIN Vlan V ON CT.VlanId = V.Id " +
+            "WHERE BatchDate > @batchDate AND V.Value != '600' " +
             "GROUP BY BatchDate, AccessPointId " +
             "ORDER BY BatchDate ASC";
 
