@@ -26,6 +26,59 @@ namespace WebMvc5.Controllers
             _chart = chart;
         }
 
+        public async Task<ActionResult> Month()
+        {
+            var charts = new List<Highcharts>();
+            for (int i = 1; i <= 12; i++)
+            {
+                charts.Add(await _chart.GetClientsPerMonth(i));
+            }
+//            var charts = await _chart.GetClientsPerMonth(5);
+            var model = new MonthViewModel { Charts = charts };
+            return View(model);
+        }
+
+        public async Task<ActionResult> MonthAccessPoint()
+        {
+            var charts = new List<Highcharts>
+            {
+                await _chart.GetClientsPerMonth(3, 345),
+                await _chart.GetClientsPerMonth(3, 252),
+                await _chart.GetClientsPerMonth(3, 282),
+                await _chart.GetClientsPerMonth(3, 291),
+                await _chart.GetClientsPerMonth(3, 342),
+                await _chart.GetClientsPerMonth(3, 306),
+                await _chart.GetClientsPerMonth(3, 273),
+                await _chart.GetClientsPerMonth(3, 285),
+                await _chart.GetClientsPerMonth(3, 303)
+            };
+
+            var model = new MonthViewModel { Charts = charts };
+            return View(model);
+        }
+
+        public async Task<ActionResult> MonthVlan()
+        {
+            var charts = new List<Highcharts>
+            {
+                await _chart.GetClientsPerMonth(3, 0, 4),
+                await _chart.GetClientsPerMonth(3, 0, 7),
+                await _chart.GetClientsPerMonth(3, 0, 10),
+                await _chart.GetClientsPerMonth(3, 0, 13),
+                await _chart.GetClientsPerMonth(3, 0, 16),
+                await _chart.GetClientsPerMonth(3, 0, 19),
+                await _chart.GetClientsPerMonth(3, 0, 22),
+                await _chart.GetClientsPerMonth(3, 0, 25),
+                await _chart.GetClientsPerMonth(3, 0, 28),
+                await _chart.GetClientsPerMonth(3, 0, 30),
+                await _chart.GetClientsPerMonth(3, 0, 33),
+                await _chart.GetClientsPerMonth(3, 0, 36)
+            };
+
+            var model = new MonthViewModel { Charts = charts };
+            return View(model);
+        }
+
         public async Task<ActionResult> Index()
         {
             var overall1hTask = _chart.GetOverallClientCount(1);
@@ -35,6 +88,8 @@ namespace WebMvc5.Controllers
             var overall16hTask = _chart.GetOverallClientCount(16);
             var overall24hTask = _chart.GetOverallClientCount(24);
             var overall48hTask = _chart.GetOverallClientCount(48);
+            //var overall72hTask = _chart.GetOverallClientCount(72);
+            //var overall7dTask = _chart.GetOverallClientCount(168);
 
             //var perVlan1hTask = _chart.GetPerVlanClientCount(1);
             //var perVlan2hTask = _chart.GetPerVlanClientCount(2);
@@ -44,19 +99,21 @@ namespace WebMvc5.Controllers
             //var perVlan24hTask = _chart.GetPerVlanClientCount(24);
             //var perVlan48hTask = _chart.GetPerVlanClientCount(48);
 
-            var perAccessPoint1hTask = _chart.GetPerAccessPointClientCount(1);
-            var perAccessPoint2hTask = _chart.GetPerAccessPointClientCount(2);
-            var perAccessPoint4hTask = _chart.GetPerAccessPointClientCount(4);
+            //var perAccessPoint1hTask = _chart.GetPerAccessPointClientCount(1);
+            //var perAccessPoint2hTask = _chart.GetPerAccessPointClientCount(2);
+            //var perAccessPoint4hTask = _chart.GetPerAccessPointClientCount(4);
             //var perAccessPoint8hTask = _chart.GetPerAccessPointClientCount(8);
             //var perAccessPoint16hTask = _chart.GetPerAccessPointClientCount(16);
             //var perAccessPoint24hTask = _chart.GetPerAccessPointClientCount(24);
             //var perAccessPoint48hTask = _chart.GetPerAccessPointClientCount(48);
 
 
-            await Task.WhenAll(overall1hTask, overall2hTask, overall4hTask, overall8hTask, overall16hTask, overall24hTask, overall48hTask,
-                //perVlan1hTask, perVlan2hTask, perVlan4hTask, perVlan8hTask, perVlan16hTask, perVlan24hTask, perVlan48hTask,
-                perAccessPoint1hTask, perAccessPoint2hTask, perAccessPoint4hTask
-                
+            await Task.WhenAll(overall1hTask, overall2hTask, overall4hTask, overall8hTask, overall16hTask, overall24hTask, overall48hTask
+                //,overall72hTask, overall7dTask
+                //,
+                //p77erVlan1hTask, perVlan2hTask, perVlan4hTask, perVlan8hTask, perVlan16hTask, perVlan24hTask, perVlan48hTask
+                //,perAccessPoint1hTask, perAccessPoint2hTask, perAccessPoint4hTask
+
                 //,perAccessPoint8hTask, perAccessPoint16hTask, perAccessPoint24hTask, perAccessPoint48hTask
                 );
 
@@ -64,7 +121,7 @@ namespace WebMvc5.Controllers
 
             var model = new IndexViewModel
             {
-                
+
                 OverallClientCountLastHour = overall1hTask.Result,
                 OverallClientCountLast2Hours = overall2hTask.Result,
                 OverallClientCountLast4Hours = overall4hTask.Result,
@@ -72,6 +129,8 @@ namespace WebMvc5.Controllers
                 OverallClientCountLast16Hours = overall16hTask.Result,
                 OverallClientCountLast24Hours = overall24hTask.Result,
                 OverallClientCountLast48Hours = overall48hTask.Result,
+                //OverallClientCountLast72Hours = overall72hTask.Result,
+                //OverallClientCountLast7Days = overall7dTask.Result,
 
                 //PerVlanClientCountLastHour = perVlan1hTask.Result,
                 //PerVlanClientCountLast2Hours = perVlan2hTask.Result,
@@ -81,9 +140,9 @@ namespace WebMvc5.Controllers
                 //PerVlanClientCountLast24Hours = perVlan24hTask.Result,
                 //PerVlanClientCountLast48Hours = perVlan48hTask.Result,
 
-                PerAccessPointClientCountLastHour = perAccessPoint1hTask.Result,
-                PerAccessPointClientCountLast2Hours = perAccessPoint2hTask.Result,
-                PerAccessPointClientCountLast4Hours = perAccessPoint4hTask.Result,
+                //PerAccessPointClientCountLastHour = perAccessPoint1hTask.Result,
+                //PerAccessPointClientCountLast2Hours = perAccessPoint2hTask.Result,
+                //PerAccessPointClientCountLast4Hours = perAccessPoint4hTask.Result,
                 //PerAccessPointClientCountLast8Hours = perAccessPoint8hTask.Result,
                 //PerAccessPointClientCountLast16Hours = perAccessPoint16hTask.Result,
                 //PerAccessPointClientCountLast24Hours = perAccessPoint24hTask.Result,
@@ -124,7 +183,7 @@ namespace WebMvc5.Controllers
                     PlotOptionsSpline = visibleAps.Contains(apGroup.Key)
                     ? new PlotOptionsSpline() { Visible = true }
                     : new PlotOptionsSpline() { Visible = false }
-            });
+                });
             }
 
             model.AccessPointClientCount = new Highcharts("AccessPointClientCount")

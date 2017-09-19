@@ -67,11 +67,17 @@
     <Compile Include="IDatabaseRepository.cs" />
     <Compile Include="Models\AccessPoint.cs" />
     <Compile Include="Models\AccessPointModel.cs" />
+    <Compile Include="Models\BatchDate.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientSummary.cs" />
+    <Compile Include="Models\ClientSummaryAccessPoint.cs" />
+    <Compile Include="Models\ClientSummaryOverall.cs" />
+    <Compile Include="Models\ClientSummaryVlan.cs" />
     <Compile Include="Models\ClientTracking.cs" />
     <Compile Include="Models\Custom\ClientCountAccessPoint.cs" />
     <Compile Include="Models\Custom\ClientCountOverall.cs" />
     <Compile Include="Models\Custom\ClientCountVlan.cs" />
+    <Compile Include="Models\Custom\DateClientCount.cs" />
     <Compile Include="Models\IpAddress.cs" />
     <Compile Include="Models\MacAddress.cs" />
     <Compile Include="Models\Ssid.cs" />
@@ -81,7 +87,9 @@
     <Compile Include="RepositoryBase.cs" />
     <Compile Include="Sql\AccessPointModelSql.cs" />
     <Compile Include="Sql\AccessPointSql.cs" />
+    <Compile Include="Sql\BatchDateSql.cs" />
     <Compile Include="Sql\ClientSql.cs" />
+    <Compile Include="Sql\ClientSummarySql.cs" />
     <Compile Include="Sql\ClientTrackingSql.cs" />
     <Compile Include="Sql\IpAddressSql.cs" />
     <Compile Include="Sql\SsidSql.cs" />

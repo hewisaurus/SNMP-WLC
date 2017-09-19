@@ -1,0 +1,14 @@
+﻿@model WebMvc5.Models.Home.MonthViewModel
+
+@{
+    ViewBag.Title = "Month";
+}
+
+<h2>Month charts</h2>
+
+@foreach (var chart in Model.Charts)
+{
+    <div class="row">
+        @chart
+    </div>
+}

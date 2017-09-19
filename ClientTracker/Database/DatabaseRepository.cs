@@ -24,6 +24,16 @@ namespace Database
             Console.WriteLine(line);
         }
 
+        public async Task<AccessPoint> GetAccessPointAsync(int id)
+        {
+            return (await QueryAsync(q => q.QueryAsync<AccessPoint>(AccessPointSql.GetById, new { id }))).SingleOrDefault();
+        }
+
+        public async Task<Vlan> GetVlanAsync(int id)
+        {
+            return (await QueryAsync(q => q.QueryAsync<Vlan>(VlanSql.GetById, new { id }))).SingleOrDefault();
+        }
+
         public async Task<ReturnValue> UpdateAccessPointModels(List<string> models)
         {
             try
@@ -264,12 +274,12 @@ namespace Database
                     while (searchClients.Any())
                     {
                         List<string> clientsProcessed = searchClients.Count < maxPerIteration
-                                ? searchClients.Take(searchClients.Count).Select(c => c.Replace(" ","").ToUpper()).ToList()
+                                ? searchClients.Take(searchClients.Count).Select(c => c.Replace(" ", "").ToUpper()).ToList()
                                 : searchClients.Take(maxPerIteration).Select(c => c.Replace(" ", "").ToUpper()).ToList();
-                        
+
                         dbClients.AddRange(
                         (await conn.QueryAsync<Client>(ClientSql.GetAllByAddress,
-                            new {macAddresses = clientsProcessed})).ToList());
+                            new { macAddresses = clientsProcessed })).ToList());
 
                         searchClients.RemoveRange(0, clientsProcessed.Count);
                     }
@@ -390,6 +400,7 @@ namespace Database
             return (await QueryAsync(q => q.QueryAsync<IpAddress>(IpAddressSql.GetAll))).ToList();
         }
 
+
         public async Task<ReturnValue> AddClientTracking(List<ClientTracking> records)
         {
             try
@@ -414,7 +425,7 @@ namespace Database
                         });
                     }
                 }
-                
+
                 sw.Stop();
 
                 return new ReturnValue(true, null, null, sw.Elapsed);
@@ -431,7 +442,7 @@ namespace Database
             return
                 (await QueryAsync(
                     q =>
-                        q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new {batchDate = smallestBatchDate})))
+                        q.QueryAsync<ClientCountOverall>(ClientTrackingSql.GetOverallClientCountGreater, new { batchDate = smallestBatchDate })))
                 .ToList();
         }
 
@@ -493,6 +504,25 @@ namespace Database
                     q =>
                         q.QueryAsync<ClientCountAccessPoint>(ClientTrackingSql.GetAccessPointClientCountGreater, new { batchDate = smallestBatchDate })))
                 .ToList();
+        }
+
+        public async Task<List<ClientSummary>> GetFullSummary(DateTime startDate, DateTime endDate)
+        {
+            return (await QueryAsync(q => q.QueryAsync<ClientSummary>(ClientSummarySql.GetRecordsForDateRange, new { startDate, endDate }))).ToList();
+        }
+
+        public async Task<List<DateClientCount>> GetClientCountSummary(DateTime startDate, DateTime endDate, int apId = 0, int vlanId = 0)
+        {
+            if (apId > 0)
+            {
+                return (await QueryAsync(q => q.QueryAsync<DateClientCount>(ClientSummarySql.GetClientSummaryForDateRangeAndAccessPoint, new { startDate, endDate, accessPointId = apId }))).ToList();
+            }
+            if (vlanId > 0)
+            {
+                return (await QueryAsync(q => q.QueryAsync<DateClientCount>(ClientSummarySql.GetClientSummaryForDateRangeAndVlan, new { startDate, endDate, vlanId }))).ToList();
+            }
+
+            return (await QueryAsync(q => q.QueryAsync<DateClientCount>(ClientSummarySql.GetClientSummaryForDateRange, new { startDate, endDate }))).ToList();
         }
     }
 }

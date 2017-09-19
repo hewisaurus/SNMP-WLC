@@ -21,6 +21,9 @@ namespace Database
         Task<List<Client>> GetClientsAsync();
         Task<List<IpAddress>> GetIpAddressesAsync();
 
+        Task<Vlan> GetVlanAsync(int id);
+        Task<AccessPoint> GetAccessPointAsync(int id);
+
         Task<ReturnValue> UpdateAccessPointModels(List<string> models);
         Task<ReturnValue> UpdateAccessPoints(List<AccessPoint> accessPoints);
         Task<ReturnValue> UpdateSsids(List<string> ssids);
@@ -37,5 +40,11 @@ namespace Database
         Task<List<ClientCountOverall>> GetOverallClientCountLastXHours(int hours);
         Task<List<ClientCountVlan>> GetPerVlanClientCountLastXHours(int hours);
         Task<List<ClientCountAccessPoint>> GetPerAccessClientCountLastXHours(int hours);
+
+        // Summary methods
+        //Task<List<BatchDate>> GetDatesInRange()
+
+        Task<List<ClientSummary>> GetFullSummary(DateTime startDate, DateTime endDate);
+        Task<List<DateClientCount>> GetClientCountSummary(DateTime startDate, DateTime endDate, int apId = 0, int vlanId = 0);
     }
 }
